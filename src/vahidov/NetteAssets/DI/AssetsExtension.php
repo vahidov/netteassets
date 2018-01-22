@@ -2,10 +2,9 @@
 
 namespace Vahidov\NetteAssets\DI;
 
-use Nette\DI;
 use Vahidov\NetteAssets\AssetMacro;
 
-class AssetsExtension extends Nette\DI\CompilerExtension
+class AssetsExtension extends \Nette\DI\CompilerExtension
 {
 
     public $defaults = [
