@@ -1,0 +1,24 @@
+{
+  "name": "vahidov/netteassets",
+  "description": "Nette assests",
+  "type": "library",
+  "require": {
+    "php": ">=7.0",
+    "latte/latte": "^2.4",
+    "nette/di": "^2.4",
+    "nette/utils": "^2.4"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Danil Vahidov",
+      "email": "vahidov@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-0": {
+      "Vahidov": "src"
+    }
+  },
+  "minimum-stability": "dev"
+}
