@@ -44,13 +44,23 @@ class AssetMacro extends Latte\Macros\MacroSet
     public static function getOutputAsset($asset, array $args, $config): string
     {
         if ($config['productionMode']!=true) {
-            return ($config['scripthost'] ? $config['scripthost'] : '//' . $_SERVER['HTTP_HOST']) . ($config['scriptport'] ? ':' . $config['scriptport'] : '') . '/' . trim($asset, '/');
+            $path = ($config['scripthost'] ? $config['scripthost'] : '//' . $_SERVER['HTTP_HOST']) . ($config['scriptport'] ? ':' . $config['scriptport'] : '').$config['assetsDir'];
+            if ($config['devVersion']=='manifest'){
+                $manifest = AssetMacro::getManifest($config);
+                return $path.(isset($manifest[trim($asset,'/')]) ? $manifest[trim($asset,'/')] : $asset);
+            }
+            elseif($config['devVersion']=='timestamp'){
+                return $path.trim($asset,'/').'?timestamp='.time();
+            }
+            else{
+                return $path.trim($asset,'/');
+            }
         } else {
             $asset = trim($asset, '/');
             if (isset($config['manifest-data'][$asset])) {
-                return '/' . $config['manifest-data'][$asset];
+                return $config['assetsDir'] . $config['manifest-data'][$asset];
             }
-            return '/' . $asset;
+            return $config['assetsDir'] . $asset;
         }
     }
 
@@ -76,9 +86,12 @@ class AssetMacro extends Latte\Macros\MacroSet
 
     public static function getManifest(array $config): array
     {
-        $path = rtrim($config['wwwDir'], '/') . '/../../' . $config['manifestFile'];
+        $path = rtrim($config['wwwDir'], '/') . $config['assetsDir']. $config['manifestFile'];
         if (!is_file($path)) {
-            return [];
+            $path = rtrim($config['wwwDir'], '/') . '/../' . $config['manifestFile'];
+            if (!is_file($path)) {
+                return [];
+            }
         }
         return Nette\Utils\Json::decode(file_get_contents($path), Nette\Utils\Json::FORCE_ARRAY);
     }
