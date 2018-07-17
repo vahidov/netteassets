@@ -16,9 +16,7 @@
     }
   ],
   "autoload": {
-    "psr-4": {
-      "Vahidov\\": "src"
-    }
+    "classmap": ["src/"]
   },
   "minimum-stability": "dev"
 }
